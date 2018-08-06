@@ -47,6 +47,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resource\Misc\DataValidationSaveBug.xlsm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\Misc\DataValidationSaveBug.xlsm" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
   </ItemGroup>

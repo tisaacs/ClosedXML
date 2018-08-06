@@ -1,5 +1,6 @@
 using ClosedXML.Excel;
 using NUnit.Framework;
+using System.IO;
 using System.Linq;
 
 namespace ClosedXML_Tests.Excel.DataValidations
@@ -238,6 +239,27 @@ namespace ClosedXML_Tests.Excel.DataValidations
                 Assert.IsTrue(ws.Range("A1:C3").Cells().Where(c => c.Address.ToString() != "B2").All(c => c.HasDataValidation));
                 Assert.IsTrue(ws.Range("A1:C3").Cells().Where(c => c.Address.ToString() != "B2")
                                 .All(c => c.DataValidation.MinValue == "10"));
+            }
+        }
+
+        [Test]
+        public void DataValidationSaveBug()
+        {
+            using (MemoryStream outputStream = new MemoryStream())
+            {
+                using (var inputStream = TestHelper.GetStreamFromResource(TestHelper.GetResourcePath(@"Misc\DataValidationSaveBug.xlsm")))
+                using (var wb = new XLWorkbook(inputStream))
+                {
+                    IXLCell cell = wb.Worksheet(1).Cell(11, 3);
+                    Assert.AreEqual("43", cell.DataValidation.Value);
+                    wb.SaveAs(outputStream);
+                }
+
+                using (var wb = new XLWorkbook(outputStream))
+                {
+                    IXLCell cell = wb.Worksheet(1).Cell(11, 3);
+                    Assert.AreEqual("43", cell.DataValidation.Value);
+                }
             }
         }
     }
